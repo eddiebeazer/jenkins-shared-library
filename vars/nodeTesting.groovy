@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 def call() {
-    parallel {
+   // parallel {
         stage('Linting') {
             steps {
                 bat 'yarn --production=false'
@@ -22,6 +22,6 @@ def call() {
                 dependencyCheckPublisher failedTotalCritical: 1, failedTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
             }
         }
-    }
+   // }
 }
 
