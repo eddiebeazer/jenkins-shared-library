@@ -5,28 +5,34 @@ def call() {
         Linting: {
             stage('Linting') {
                 agent any
-                nodejs(nodeJSInstallationName: '16') {
+                steps {
+                    nodejs(nodeJSInstallationName: '16') {
                     bat 'yarn --production=false'
                     bat 'yarn lint'
+                }
                 }
             }
         },
         'Dependency Check': {
             stage('Dependency Check') {
                 agent any
-                nodejs(nodeJSInstallationName: '16') {
+                steps {
+                    nodejs(nodeJSInstallationName: '16') {
                     bat 'yarn --production=false'
                     dependencyCheck additionalArguments: '', odcInstallation: '8.0.1', stopBuild: true
                     dependencyCheckPublisher failedTotalCritical: 1, failedTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
+                }
                 }
             }
         },
         'Unit Tests': {
             stage('Unit Tests') {
                 agent any
-                nodejs(nodeJSInstallationName: '16') {
+                steps {
+                    nodejs(nodeJSInstallationName: '16') {
                     bat 'yarn --production=false'
                     bat 'yarn test'
+                }
                 }
             }
         }
