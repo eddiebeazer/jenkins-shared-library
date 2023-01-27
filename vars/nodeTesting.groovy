@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-def call() {
+def call(Closure closure) {
     parallel({
         Linting: {
             node {
@@ -8,6 +8,7 @@ stage('Linting') {
         //    steps {
                 bat 'yarn --production=false'
                 bat 'yarn lint'
+                closure()
            // }
         }
             }
