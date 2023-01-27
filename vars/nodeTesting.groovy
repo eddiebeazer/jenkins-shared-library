@@ -11,8 +11,11 @@ def call() {
         },
         'Dependency Check': {
             stage('Dependency Check') {
-                dependencyCheck additionalArguments: '', odcInstallation: '8.0.1', stopBuild: true
-                dependencyCheckPublisher failedTotalCritical: 1, failedTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
+                nodejs(nodeJSInstallationName: '16') {
+                    bat 'yarn'
+                    dependencyCheck additionalArguments: '', odcInstallation: '8.0.1', stopBuild: true
+                    dependencyCheckPublisher failedTotalCritical: 1, failedTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
+                }
             }
         },
         'Unit Tests': {
