@@ -4,7 +4,7 @@ def call() {
     parallel(
         Linting: {
             stage('Linting') {
-                agent any
+               // agent any
                 nodejs(nodeJSInstallationName: '16') {
                     echo pwd()
                     bat 'yarn --production=false'
@@ -14,7 +14,7 @@ def call() {
         },
         'Dependency Check': {
             stage('Dependency Check') {
-                agent any
+                //agent any
                 nodejs(nodeJSInstallationName: '16') {
                     echo pwd()
                     bat 'yarn --production=false'
@@ -25,7 +25,7 @@ def call() {
         },
         'Unit Tests': {
             stage('Unit Tests') {
-                agent any
+               // agent any
                 nodejs(nodeJSInstallationName: '16') {
                     echo pwd()
                     bat 'yarn --production=false'
