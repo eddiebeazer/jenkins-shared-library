@@ -4,6 +4,7 @@ def call() {
     parallel(
         Linting: {
             stage('Linting') {
+                agent any
                 nodejs(nodeJSInstallationName: '16') {
                     bat 'yarn --production=false'
                     bat 'yarn lint'
@@ -12,6 +13,7 @@ def call() {
         },
         'Dependency Check': {
             stage('Dependency Check') {
+                agent any
                 nodejs(nodeJSInstallationName: '16') {
                     bat 'yarn --production=false'
                     dependencyCheck additionalArguments: '', odcInstallation: '8.0.1', stopBuild: true
@@ -21,6 +23,7 @@ def call() {
         },
         'Unit Tests': {
             stage('Unit Tests') {
+                agent any
                 nodejs(nodeJSInstallationName: '16') {
                     bat 'yarn --production=false'
                     bat 'yarn test'
