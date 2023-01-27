@@ -4,21 +4,27 @@ def call() {
     parallel(
         Linting: {
             stage('Linting') {
-                bat 'yarn --production=false'
-                bat 'yarn lint'
+                nodejs(nodeJSInstallationName: '16') {
+                    bat 'yarn --production=false'
+                    bat 'yarn lint'
+                }
             }
         },
         'Dependency Check': {
             stage('Dependency Check') {
-                bat 'yarn --production=false'
-                dependencyCheck additionalArguments: '', odcInstallation: '8.0.1', stopBuild: true
-                dependencyCheckPublisher failedTotalCritical: 1, failedTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
+                nodejs(nodeJSInstallationName: '16') {
+                    bat 'yarn --production=false'
+                    dependencyCheck additionalArguments: '', odcInstallation: '8.0.1', stopBuild: true
+                    dependencyCheckPublisher failedTotalCritical: 1, failedTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
+                }
             }
         },
         'Unit Tests': {
             stage('Unit Tests') {
-                bat 'yarn --production=false'
-                bat 'yarn test'
+                nodejs(nodeJSInstallationName: '16') {
+                    bat 'yarn --production=false'
+                    bat 'yarn test'
+                }
             }
         }
     )
