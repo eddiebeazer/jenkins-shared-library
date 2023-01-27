@@ -3,7 +3,7 @@
 def call(Closure closure) {
     parallel(
         Linting: {
-            node("test && san-jose") {
+            node {
 stage('Linting') {
         //    steps {
                 bat 'yarn --production=false'
