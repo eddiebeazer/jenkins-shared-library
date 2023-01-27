@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 def call(Closure closure) {
-    parallel({
+    parallel(
         Linting: {
             node("test && san-jose") {
 stage('Linting') {
@@ -27,7 +27,7 @@ stage('Linting') {
         //         dependencyCheckPublisher failedTotalCritical: 1, failedTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
         //     }
         // }
-    })
+    )
 }
 
 // def call(Closure closure) {
