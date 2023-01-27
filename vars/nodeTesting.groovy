@@ -8,14 +8,14 @@ def call() {
                 bat 'yarn lint'
             }
         },
-        DependencyCheck: {
+        'Dependency Check': {
             stage('Dependency Check') {
                 bat 'yarn --production=false'
                 dependencyCheck additionalArguments: '', odcInstallation: '8.0.1', stopBuild: true
                 dependencyCheckPublisher failedTotalCritical: 1, failedTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
             }
         },
-        UnitTests: {
+        'Unit Tests': {
             stage('Unit Tests') {
                 bat 'yarn --production=false'
                 bat 'yarn test'
