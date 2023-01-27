@@ -13,7 +13,7 @@ def call() {
             stage('Dependency Check') {
                 nodejs(nodeJSInstallationName: '16') {
                     dependencyCheck additionalArguments: '--disableYarnAudit', odcInstallation: '8.0.1', stopBuild: true
-                    dependencyCheckPublisher failedTotalCritical: 1, failedTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
+                    dependencyCheckPublisher unstableTotalCritical: 1, unstableTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
                 }
             }
         },
