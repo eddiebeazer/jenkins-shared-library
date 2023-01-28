@@ -1,0 +1,38 @@
+#!/usr/bin/env groovy
+
+def call() {
+    script {
+        if ( params.REPO_VERSION != null) {
+            currentTagVersion =  params.REPO_VERSION
+        }  else {
+            currentTagVersion = '0.1.0'
+        }
+
+        sh 'cp /mnt/tools/bin/BitbucketVersioning/semantic-versioning . && chmod +x ./semantic-versioning'
+        def commitMessage = sh(returnStdout:true, script: "git --no-pager show -s ${GIT_COMMIT} | tr -d '\\n'")
+        sh "./semantic-versioning -commit '''${commitMessage}''' -version ${currentTagVersion}"
+        tagVersion = sh(returnStdout: true, script: 'cat ./version.txt')
+
+        if (tagVersion == '0.0.0') {
+            echo 'No new tag version found'
+            properties([
+                parameters([
+                    string(defaultValue: "${currentTagVersion}", description: 'Repo Version', name: 'REPO_VERSION', trim: true)
+                ])
+            ])
+        } else {
+            withCredentials([usernamePassword(credentialsId: 'github',  usernameVariable: 'TOKEN_USER', passwordVariable: 'TOKEN_PASS')]) {
+                bat 'git tag -d $(git tag -l)'
+                bat "git tag ${tagVersion}"
+                bat 'git push https://$TOKEN_USER:$TOKEN_PASS@$GIT_URL --tags'
+                currentTagVersion = "${tagVersion}"
+            }
+            properties([
+                parameters([
+                    string(defaultValue: "${tagVersion}", description: 'Repo Version', name: 'REPO_VERSION', trim: true)
+                ])
+            ])
+        }
+    }
+}
+
