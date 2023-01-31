@@ -5,7 +5,7 @@ def call(Map pipelineParams) {
         agent {
             label 'Linux'
         }
-        tools { node '16' }
+        tools { nodejs '16' }
         stages {
             stage('Installing Firebase Tools') {
                 steps {
