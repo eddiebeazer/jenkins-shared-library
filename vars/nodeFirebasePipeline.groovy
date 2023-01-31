@@ -7,11 +7,6 @@ def call(Map pipelineParams) {
         }
         tools { nodejs '16' }
         stages {
-            stage('Installing Firebase Tools') {
-                steps {
-                    sh 'npm install -g firebase-tools'
-                }
-            }
             stage('Installing Dependencies') {
                 steps {
                     sh 'yarn --production=false'
