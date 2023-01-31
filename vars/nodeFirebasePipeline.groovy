@@ -3,11 +3,9 @@
 def call(Map pipelineParams) {
     pipeline {
         agent {
-            docker {
-                label 'Docker'
-                image pipelineParams.dockerImage
-            }
+            label 'Linux'
         }
+        tools { node '16' }
         stages {
             stage('Installing Firebase Tools') {
                 steps {
