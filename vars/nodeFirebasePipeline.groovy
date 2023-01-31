@@ -18,6 +18,9 @@ def call(Map pipelineParams) {
                 }
             }
             stage('Dependency Check') {
+                when {
+                    changeRequest()
+                }
                 steps {
                     dependencyCheck additionalArguments: '--disableYarnAudit', odcInstallation: '8.0.1', stopBuild: true
                     dependencyCheckPublisher unstableTotalCritical: 1, unstableTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
