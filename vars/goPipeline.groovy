@@ -13,6 +13,8 @@ def call(Map pipelineParams) {
         stages {
             stage('Installing Dependencies') {
                 steps {
+                    // gcc compiler for go
+                    sh 'sudo apt-get install build-essential -y'
                     sh 'go get -u -d ./...'
                     sh 'go install github.com/jstemmer/go-junit-report/v2@latest'
                     sh 'go install github.com/axw/gocov/gocov@latest'
