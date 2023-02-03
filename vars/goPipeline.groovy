@@ -17,8 +17,6 @@ def call(Map pipelineParams) {
                     sh 'go install github.com/jstemmer/go-junit-report/v2@latest'
                     sh 'go install github.com/axw/gocov/gocov@latest'
                     sh 'go install github.com/AlekSi/gocov-xml@latest'
-                    sh 'cd $HOME/go && ls -al'
-                    sh 'cd $HOME/go/bin && ls -al'
                 }
             }
             stage('Testing') {
@@ -34,17 +32,13 @@ def call(Map pipelineParams) {
                     }
                     stage('Code Coverage') {
                         steps {
-
-                            sh '$GOROOT/bin/gocov test ./... | $GOROOT/bin/gocov-xml > coverage.xml'
-
+                            sh '$HOME/go/bin/gocov test ./... | $HOME/go/bin/gocov-xml > coverage.xml'
                             publishCoverage adapters: [cobertura('coverage.xml')]
                         }
                     }
                     stage('Unit Tests') {
                         steps {
-
-                            sh 'go test -v 2>&1 ./... | $GOROOT/bin/go-junit-report -set-exit-code > report.xml'
-
+                            sh 'go test -v 2>&1 ./... | $HOME/go/bin/go-junit-report -set-exit-code > report.xml'
                             junit testResults: 'report.xml', skipPublishingChecks: false
                         }
                     }
