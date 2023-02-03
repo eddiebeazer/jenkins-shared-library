@@ -31,7 +31,7 @@ def call(Map pipelineParams) {
                         steps {
                             sh 'go install github.com/axw/gocov/gocov@latest'
                             sh 'go install github.com/AlekSi/gocov-xml@latest'
-                            sh 'gocov test ./... | gocov-xml > coverage.xml'
+                            sh '$GOROOT/bin/gocov test ./... | $GOROOT/bin/gocov-xml > coverage.xml'
 
                             publishCoverage adapters: [cobertura('coverage.xml')]
                         }
@@ -39,7 +39,7 @@ def call(Map pipelineParams) {
                     stage('Unit Tests') {
                         steps {
                             sh 'go install github.com/jstemmer/go-junit-report/v2@latest'
-                            sh 'go test -v 2>&1 ./... | go-junit-report -set-exit-code > report.xml'
+                            sh 'go test -v 2>&1 ./... | $GOROOT/bin/go-junit-report -set-exit-code > report.xml'
 
                             junit testResults: 'report.xml', skipPublishingChecks: false
                         }
