@@ -14,7 +14,7 @@ def call(Map pipelineParams) {
             stage('Installing Dependencies') {
                 steps {
                     sh 'go get -u -d ./...'
-                    sh 'cd $HOME/go/bin && ls -al'
+                    sh 'cd $HOME && ls -al'
                     sh 'cd $GOPATH/go/bin && ls -al'
                 }
             }
