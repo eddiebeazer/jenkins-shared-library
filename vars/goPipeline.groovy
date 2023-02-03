@@ -14,6 +14,8 @@ def call(Map pipelineParams) {
             stage('Installing Dependencies') {
                 steps {
                     sh 'go get -u -d ./...'
+                    sh 'cd $GOROOT/bin'
+                    sh 'ls -al'
                 }
             }
             stage('Testing') {
