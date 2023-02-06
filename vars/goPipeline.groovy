@@ -2,7 +2,9 @@
 
 def call(Map pipelineParams) {
     pipeline {
-        agent any
+        agent {
+            label 'Linux'
+        }
         environment {
             PLAYFAB_SECRET     = credentials('playfab-test-secret-key')
             PLAYFAB_TITLE_ID = credentials('playfab-test-title-id')
