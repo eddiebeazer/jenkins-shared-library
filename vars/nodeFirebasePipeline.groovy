@@ -48,7 +48,7 @@ def call(Map pipelineParams) {
                 steps {
                     script {
                         if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'master') {
-                            sh 'firebase deploy --only hosting:$pipelineParams.projectName --token $FIREBASE_CI_TOKEN'
+                            sh 'firebase deploy --token $FIREBASE_CI_TOKEN'
                         } else {
                             sh 'firebase hosting:channel:deploy $BRANCH_NAME --expires 7d --token $FIREBASE_CI_TOKEN'
                         }
