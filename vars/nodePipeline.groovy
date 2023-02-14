@@ -16,13 +16,20 @@ def call(Map pipelineParams) {
                 }
             }
             stage('Linting') {
+                when {
+                    expression {
+                        pipelineParams.linting == true
+                    }
+                }
                 steps {
                     sh 'yarn lint'
                 }
             }
             stage('Dependency Check') {
                 when {
-                    changeRequest()
+                    expression {
+                        pipelineParams.dependencyCheck == true
+                    }
                 }
                 steps {
                     dependencyCheck additionalArguments: '--disableYarnAudit', odcInstallation: '8.0.1', stopBuild: true
@@ -30,19 +37,29 @@ def call(Map pipelineParams) {
                 }
             }
             stage('Unit Tests') {
+                when {
+                    expression {
+                        pipelineParams.unitTests == true
+                    }
+                }
                 steps {
                     sh 'yarn test'
                 }
             }
             stage('Build') {
+                when {
+                    expression {
+                        pipelineParams.build == true
+                    }
+                }
                 steps {
                     sh 'yarn build'
                 }
             }
-            stage('Deploy') {
+            stage('Firebase Deploy') {
                 when {
                     expression {
-                        pipelineParams.deploy == true
+                        pipelineParams.firebaseDeploy == true
                     }
                 }
                 steps {
