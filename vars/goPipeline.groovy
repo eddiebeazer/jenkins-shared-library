@@ -10,7 +10,7 @@ def call(Map pipelineParams) {
             PLAYFAB_TITLE_ID = credentials('playfab-test-title-id')
         }
         tools {
-            go '1.18'
+            go pipelineParams.goVersion
         }
         stages {
             stage('Installing Dependencies') {
@@ -25,7 +25,9 @@ def call(Map pipelineParams) {
                 stages {
                     stage('Dependency Check') {
                         when {
-                            changeRequest()
+                            expression {
+                                pipelineParams.dependencyCheck == true
+                            }
                         }
                         steps {
                             dependencyCheck additionalArguments: '', odcInstallation: '8.0.1', stopBuild: true
@@ -33,12 +35,22 @@ def call(Map pipelineParams) {
                         }
                     }
                     stage('Code Coverage') {
+                        when {
+                            expression {
+                                pipelineParams.codeCoverage == true
+                            }
+                        }
                         steps {
                             sh '$HOME/go/bin/gocov test ./... | $HOME/go/bin/gocov-xml > coverage.xml'
                             publishCoverage adapters: [cobertura('coverage.xml')]
                         }
                     }
                     stage('Unit Tests') {
+                        when {
+                            expression {
+                                pipelineParams.unitTests == true
+                            }
+                        }
                         steps {
                             sh 'go test -v 2>&1 ./... | $HOME/go/bin/go-junit-report -set-exit-code > report.xml'
                             junit testResults: 'report.xml', skipPublishingChecks: false
@@ -49,11 +61,21 @@ def call(Map pipelineParams) {
             stage('Build') {
                 when {
                     expression {
-                        pipelineParams.deploy == true
+                        pipelineParams.build == true
                     }
                 }
                 steps {
                     echo 'building'
+                }
+            }
+            stage('Deploy') {
+                when {
+                    expression {
+                        pipelineParams.deploy == true
+                    }
+                }
+                steps {
+                    echo 'deploying'
                 }
             }
         }

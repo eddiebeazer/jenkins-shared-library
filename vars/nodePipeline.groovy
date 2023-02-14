@@ -15,35 +15,39 @@ def call(Map pipelineParams) {
                     sh 'yarn --production=false'
                 }
             }
-            stage('Linting') {
-                when {
-                    expression {
-                        pipelineParams.linting == true
+            stage('Testing') {
+                stages {
+                    stage('Linting') {
+                        when {
+                            expression {
+                                pipelineParams.linting == true
+                            }
+                        }
+                        steps {
+                            sh 'yarn lint'
+                        }
                     }
-                }
-                steps {
-                    sh 'yarn lint'
-                }
-            }
-            stage('Dependency Check') {
-                when {
-                    expression {
-                        pipelineParams.dependencyCheck == true
+                    stage('Dependency Check') {
+                        when {
+                            expression {
+                                pipelineParams.dependencyCheck == true
+                            }
+                        }
+                        steps {
+                            dependencyCheck additionalArguments: '--disableYarnAudit', odcInstallation: '8.0.1', stopBuild: true
+                            dependencyCheckPublisher unstableTotalCritical: 1, unstableTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
+                        }
                     }
-                }
-                steps {
-                    dependencyCheck additionalArguments: '--disableYarnAudit', odcInstallation: '8.0.1', stopBuild: true
-                    dependencyCheckPublisher unstableTotalCritical: 1, unstableTotalHigh: 1, unstableTotalLow: 10, unstableTotalMedium: 5
-                }
-            }
-            stage('Unit Tests') {
-                when {
-                    expression {
-                        pipelineParams.unitTests == true
+                    stage('Unit Tests') {
+                        when {
+                            expression {
+                                pipelineParams.unitTests == true
+                            }
+                        }
+                        steps {
+                            sh 'yarn test'
+                        }
                     }
-                }
-                steps {
-                    sh 'yarn test'
                 }
             }
             stage('Build') {
