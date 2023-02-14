@@ -17,7 +17,9 @@ def call(Map pipelineParams) {
         stages {
             stage('Installing Dependencies') {
                 steps {
-                    sh 'yarn --production=false'
+                    lock('yarn') {
+                        sh 'yarn --production=false'
+                    }
                 }
             }
             stage('Testing') {
@@ -29,7 +31,9 @@ def call(Map pipelineParams) {
                             }
                         }
                         steps {
-                            sh 'yarn lint'
+                            lock('yarn') {
+                                sh 'yarn lint'
+                            }
                         }
                     }
                     stage('Dependency Check') {
@@ -50,7 +54,10 @@ def call(Map pipelineParams) {
                             }
                         }
                         steps {
-                            sh 'yarn test'
+                                                        lock('yarn') {
+                                sh 'yarn test'
+                            }
+                            
                         }
                     }
                 }
