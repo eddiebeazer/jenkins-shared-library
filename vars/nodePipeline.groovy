@@ -8,7 +8,7 @@ def call(Map pipelineParams) {
         environment {
             FIREBASE_CI_TOKEN     = credentials('FIREBASE_CI_TOKEN')
         }
-        tools { nodejs '16' }
+        tools { nodejs pipelineParams.nodeVersion }
         stages {
             stage('Installing Dependencies') {
                 steps {
