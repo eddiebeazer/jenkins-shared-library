@@ -54,10 +54,9 @@ def call(Map pipelineParams) {
                             }
                         }
                         steps {
-                                                        lock('yarn') {
+                            lock('yarn') {
                                 sh 'yarn test'
                             }
-                            
                         }
                     }
                 }
@@ -69,7 +68,9 @@ def call(Map pipelineParams) {
                     }
                 }
                 steps {
-                    sh 'yarn build'
+                    lock('yarn') {
+                        sh 'yarn build'
+                    }
                 }
             }
             stage('Firebase Deploy') {
