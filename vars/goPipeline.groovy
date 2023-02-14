@@ -12,6 +12,11 @@ def call(Map pipelineParams) {
         tools {
             go pipelineParams.goVersion
         }
+        options {
+            disableConcurrentBuilds()
+            parallelsAlwaysFailFast()
+            timeout(time: 15, unit: 'MINUTES')
+        }
         stages {
             stage('Installing Dependencies') {
                 steps {

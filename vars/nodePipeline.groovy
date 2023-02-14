@@ -9,6 +9,11 @@ def call(Map pipelineParams) {
             FIREBASE_CI_TOKEN     = credentials('FIREBASE_CI_TOKEN')
         }
         tools { nodejs pipelineParams.nodeVersion }
+        options {
+            disableConcurrentBuilds()
+            parallelsAlwaysFailFast()
+            timeout(time: 15, unit: 'MINUTES')
+        }
         stages {
             stage('Installing Dependencies') {
                 steps {
